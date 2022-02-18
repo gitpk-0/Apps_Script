@@ -45,6 +45,36 @@ function ohOoFormat() {
   var aptRules = s.getConditionalFormatRules();
   aptRules.push(aptRule);
   s.setConditionalFormatRules(aptRules);
+
+
+  // // percentage formatting -- very slow
+  // var percentRange = s.getRange("Q:Q");
+  // var rows = percentRange.getNumRows();
+  // var cols = percentRange.getNumColumns();
+  // for (var row = 1; row <= rows; row++) {
+  //   for (var col = 1; col <= cols; col++) {
+  //     var cell = percentRange.getCell(row, col);
+  //     var value = cell.getValue();
+  //     if (typeof(value) == 'number' && value > 0) {
+  //       cell.setNumberFormat("##.#%");
+  //     }
+  //   }
+  // }
+
+
+  // // currency formatting -- very slow
+  // var percentRange = s.getRange("T:U");
+  // var rows = percentRange.getNumRows();
+  // var cols = percentRange.getNumColumns();
+  // for (var row = 1; row <= rows; row++) {
+  //   for (var col = 1; col <= cols; col++) {
+  //     var cell = percentRange.getCell(row, col);
+  //     var value = cell.getValue();
+  //     if (typeof(value) == 'number') {
+  //       cell.setNumberFormat("$#.##");
+  //     }
+  //   }
+  // }
   
 
 }
@@ -71,9 +101,10 @@ function promoFormat() {
   colRange.setHorizontalAlignment("center").setVerticalAlignment("middle");
 
 
-  // header vertical align -- middle
-  var headRange = s.getRange("A2:AA2");
-  headRange.setVerticalAlignment("middle");
+  // headers already formatted in Template tab
+  // // header vertical align -- middle
+  // var headRange = s.getRange("A2:AA2");
+  // headRange.setVerticalAlignment("middle");
 
 
   // header
@@ -136,7 +167,7 @@ function endcapFormat() {
 
 
   // invalid APT conditional formatting
-  var aptRange = s.getRange("N:N");
+  var aptRange = s.getRange("J:J");
   var aptRule = SpreadsheetApp.newConditionalFormatRule()
     .whenDateEqualTo(new Date("01/01/2001"))
     .setBackground("#f4cccc")
@@ -170,8 +201,6 @@ function onOpen() {
 
 
 // // need to implement:
-// convert decimal to percentage 
-// convert to currency
 // autoresize columns (autoResizeColumns())  **** header rows prevent this from working properly
 // duplicate UPC conditional formatting
 
