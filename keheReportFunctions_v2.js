@@ -47,6 +47,33 @@ function ohOoFormat() {
   s.setConditionalFormatRules(aptRules);
 
 
+  // ETA passed conditional formatting
+  var currentDate = new Date();
+  var etaRange = s.getRange("L:L");
+  var etaRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenDateBefore(currentDate)
+    .setBackground("#f4cccc")
+    .setRanges([etaRange])
+    .build();
+  var etaRules = s.getConditionalFormatRules();
+  etaRules.push(etaRule);
+  s.setConditionalFormatRules(etaRules);
+
+
+  // ETA too far out conditional formatting
+  var currentDate = new Date();
+  var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
+  var etaRange = s.getRange("L:L");
+  var etaRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenDateAfter(tooFarDate)
+    .setBackground("#f4cccc")
+    .setRanges([etaRange])
+    .build();
+  var etaRules = s.getConditionalFormatRules();
+  etaRules.push(etaRule);
+  s.setConditionalFormatRules(etaRules);
+
+
   // // percentage formatting -- very slow
   // var percentRange = s.getRange("Q:Q");
   // var rows = percentRange.getNumRows();
@@ -131,6 +158,33 @@ function promoFormat() {
   aptRules.push(aptRule);
   s.setConditionalFormatRules(aptRules);
 
+
+  // ETA passed conditional formatting
+  var currentDate = new Date();
+  var etaRange = s.getRange("L:L");
+  var etaRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenDateBefore(currentDate)
+    .setBackground("#f4cccc")
+    .setRanges([etaRange])
+    .build();
+  var etaRules = s.getConditionalFormatRules();
+  etaRules.push(etaRule);
+  s.setConditionalFormatRules(etaRules);
+  
+
+  // ETA too far out conditional formatting
+  var currentDate = new Date();
+  var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
+  var etaRange = s.getRange("L:L");
+  var etaRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenDateAfter(tooFarDate)
+    .setBackground("#f4cccc")
+    .setRanges([etaRange])
+    .build();
+  var etaRules = s.getConditionalFormatRules();
+  etaRules.push(etaRule);
+  s.setConditionalFormatRules(etaRules);
+
 }
 
 
@@ -177,6 +231,33 @@ function endcapFormat() {
   aptRules.push(aptRule);
   s.setConditionalFormatRules(aptRules);
 
+
+  // ETA passed conditional formatting
+  var currentDate = new Date();
+  var etaRange = s.getRange("I:I");
+  var etaRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenDateBefore(currentDate)
+    .setBackground("#f4cccc")
+    .setRanges([etaRange])
+    .build();
+  var etaRules = s.getConditionalFormatRules();
+  etaRules.push(etaRule);
+  s.setConditionalFormatRules(etaRules);
+  
+
+  // ETA too far out conditional formatting
+  var currentDate = new Date();
+  var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
+  var etaRange = s.getRange("I:I");
+  var etaRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenDateAfter(tooFarDate)
+    .setBackground("#f4cccc")
+    .setRanges([etaRange])
+    .build();
+  var etaRules = s.getConditionalFormatRules();
+  etaRules.push(etaRule);
+  s.setConditionalFormatRules(etaRules);
+
 }
 
 
@@ -194,8 +275,14 @@ function onOpen() {
 }
 
 
+/* tests */
+// var now = new Date();
+// console.log("date:" + now);
 
-
+// var currentDate = new Date();
+// var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
+// // currentDate.setDate(currentDate.getDate()+1);
+// console.log(tooFarDate);
 
 
 
