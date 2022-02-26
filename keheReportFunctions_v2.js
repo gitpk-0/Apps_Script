@@ -10,8 +10,11 @@ function ohOoFormat() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
 
-  // updating sheet name with current date
+  // updating doc and sheet names with current date
   let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
+  let docName = "KeHE Report (updated " + date + ")";  
+  ss.setName(docName);
+
   let mainTabName = "OH OO " + date;
   s.setName(mainTabName);
 
@@ -326,5 +329,4 @@ function onOpen() {
 // duplicate UPC conditional formatting
 
 
-// tab naming (date)
-// tab hiding (in color script)
+// batch tab hiding
