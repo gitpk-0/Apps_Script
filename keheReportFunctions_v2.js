@@ -10,21 +10,26 @@ function ohOoFormat() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
 
+  // updating sheet name with current date
+  let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
+  let mainTabName = "OH OO " + date;
+  s.setName(mainTabName);
+
 
   // date formatting
   var dateRange = s.getRange("L:N");
   dateRange.setNumberFormat("m/dd/yyyy");
 
 
-  // horizontal align -- center (columns H thru AJ)
-  var colRange = s.getRange("H:AJ");
+  // horizontal align -- center (columns H thru AH)
+  var colRange = s.getRange("H:AH");
   colRange.setHorizontalAlignment("center").setVerticalAlignment("middle");
 
 
   // header
-  var ohOo = headers.getRange('A2:AJ2');
+  var ohOo = headers.getRange('A2:AH2');
   s.insertRowBefore(1); // inserts new empty first row
-  var destinationS = s.getRange("A1:AJ1");
+  var destinationS = s.getRange("A1:AH1");
   ohOo.copyTo(destinationS); // pastes headers to first row
 
 
@@ -60,6 +65,19 @@ function ohOoFormat() {
   s.setConditionalFormatRules(etaRules);
 
 
+  // No ETA conditional formatting
+  // var currentDate = new Date();
+  // var etaRange = s.getRange("L:L");
+  // var etaRule = SpreadsheetApp.newConditionalFormatRule()
+  //   .whenDateEqualTo(undefined)
+  //   .setBackground("#111111")
+  //   .setRanges([etaRange])
+  //   .build();
+  // var etaRules = s.getConditionalFormatRules();
+  // etaRules.push(etaRule);
+  // s.setConditionalFormatRules(etaRules);
+
+
   // ETA too far out conditional formatting
   var currentDate = new Date();
   var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
@@ -73,35 +91,8 @@ function ohOoFormat() {
   etaRules.push(etaRule);
   s.setConditionalFormatRules(etaRules);
 
-
-  // // percentage formatting -- very slow
-  // var percentRange = s.getRange("Q:Q");
-  // var rows = percentRange.getNumRows();
-  // var cols = percentRange.getNumColumns();
-  // for (var row = 1; row <= rows; row++) {
-  //   for (var col = 1; col <= cols; col++) {
-  //     var cell = percentRange.getCell(row, col);
-  //     var value = cell.getValue();
-  //     if (typeof(value) == 'number' && value > 0) {
-  //       cell.setNumberFormat("##.#%");
-  //     }
-  //   }
-  // }
-
-
-  // // currency formatting -- very slow
-  // var percentRange = s.getRange("T:U");
-  // var rows = percentRange.getNumRows();
-  // var cols = percentRange.getNumColumns();
-  // for (var row = 1; row <= rows; row++) {
-  //   for (var col = 1; col <= cols; col++) {
-  //     var cell = percentRange.getCell(row, col);
-  //     var value = cell.getValue();
-  //     if (typeof(value) == 'number') {
-  //       cell.setNumberFormat("$#.##");
-  //     }
-  //   }
-  // }
+  // set tab color to green
+  s.setTabColor("#00ff00");
   
 
 }
@@ -116,6 +107,11 @@ function promoFormat() {
   
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
+
+  // updating sheet name with current date
+  let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
+  let mainTabName = "Flagged Promo Items " + date;
+  s.setName(mainTabName);
 
 
   // date formatting
@@ -172,7 +168,7 @@ function promoFormat() {
   s.setConditionalFormatRules(etaRules);
   
 
-  // ETA too far out conditional formatting
+  // ETA too far out conditional formatting (10 days or more)
   var currentDate = new Date();
   var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
   var etaRange = s.getRange("L:L");
@@ -184,6 +180,10 @@ function promoFormat() {
   var etaRules = s.getConditionalFormatRules();
   etaRules.push(etaRule);
   s.setConditionalFormatRules(etaRules);
+
+
+  // set tab color to green
+  s.setTabColor("#00ff00");
 
 }
 
@@ -197,6 +197,11 @@ function endcapFormat() {
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
+
+  // updating sheet name with current date
+  let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
+  let mainTabName = "ENDCAP " + date;
+  s.setName(mainTabName);
 
 
   // date formatting
@@ -258,8 +263,32 @@ function endcapFormat() {
   etaRules.push(etaRule);
   s.setConditionalFormatRules(etaRules);
 
+  // set tab color to green
+  s.setTabColor("#00ff00");
+
 }
 
+
+function mondayArchive() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getActiveSheet();
+  s.setTabColor("#ff0000") // change sheet color to bright red
+  s.hideSheet();
+}
+
+function wednesdayArchive() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getActiveSheet();
+  s.setTabColor("#ffff00") // change sheet color to yellow
+  s.hideSheet();
+}
+
+function fridayArchive() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getActiveSheet();
+  s.setTabColor("#4a86e8") // change sheet color to blue
+  s.hideSheet();
+}
 
 function onOpen() {
   let ui = SpreadsheetApp.getUi();
@@ -270,6 +299,11 @@ function onOpen() {
     .addItem('Promo Tab Formatting', 'promoFormat')
     .addSeparator()
     .addItem('Endcap Tab Formatting', 'endcapFormat')
+    .addSeparator()
+    .addSeparator()
+    .addItem('Archive - Monday', 'mondayArchive')
+    .addItem('Archive - Wednesday', 'wednesdayArchive')
+    .addItem('Archive - Friday', 'fridayArchive')
 
     .addToUi(); 
 }
@@ -292,3 +326,5 @@ function onOpen() {
 // duplicate UPC conditional formatting
 
 
+// tab naming (date)
+// tab hiding (in color script)
