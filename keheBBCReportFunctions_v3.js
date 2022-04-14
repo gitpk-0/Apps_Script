@@ -310,12 +310,15 @@ function hideTabs() {
   var visibleSheets = SpreadsheetApp.getActive().getSheets().filter(s => !s.isSheetHidden()).map(s => s.getName())
   var lenVis = visibleSheets.length
 
-  if (lenVis == 6){  
+  if (lenVis == 6){
     for (let i = 0; i < 3; i++) {
       var sheet = ss.getSheetByName(visibleSheets[i])
       sheet.setTabColor("#ff0000") // change sheet color to bright red
       sheet.hideSheet();
     }
+  } else {
+    var ui = SpreadsheetApp.getUi();
+    var Alert = ui.alert("The are more (or less) than 6 visible tabs/sheets. This script will not run unless there are exactly 6 unhidden tabs/sheets. Please make the necessary adjustments and rerun the script.");
   }
   return;
 }
@@ -335,6 +338,9 @@ function deleteCheckRows() {
         sheet.deleteRow(2);
       }      
     }
+  } else {
+    var ui = SpreadsheetApp.getUi();
+    var Alert = ui.alert("There are more (or less) than 3 visible tabs/sheets. This script will not run unless there are exactly 3 unhidden tabs/sheets. Please make the necessary adjustments and rerun the script.");
   }
   return;
 }
