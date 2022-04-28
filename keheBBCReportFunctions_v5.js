@@ -2,21 +2,19 @@
 var headers = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Template");
 
 
-
 /*  ********************  */
-/*  OH OO TAB FORMATTING  */
+/*  BBC TAB FORMATTING  */
 /*  ********************  */
 
-function ohOoFormat() {
+function bbcFormat() {
 
-  
+  // Hide previous/old report tabs
   function hideTabs() {
     var ss = SpreadsheetApp.getActiveSpreadsheet();  
     var visibleSheets = SpreadsheetApp.getActive().getSheets().filter(s => !s.isSheetHidden()).map(s => s.getName())
     var lenVis = visibleSheets.length
 
     if (lenVis == 6){
-      // Hide previous/old report tabs
       for (let i = 0; i < 3; i++) {
         var sheet = ss.getSheetByName(visibleSheets[i])
         sheet.setTabColor("#ff0000") // change sheet color to bright red
@@ -28,7 +26,7 @@ function ohOoFormat() {
       // updating doc and sheet names with current date
       let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
       
-      let docName = "KeHE Report (updated " + date + ")";  
+      let docName = "BBC/NL KeHE Report (updated " + date + ")";  
       ss.setName(docName);
 
       let mainTabName = "OH OO " + date;
@@ -36,29 +34,30 @@ function ohOoFormat() {
 
 
       // date formatting
-      var dateRange = s.getRange("L:N");
+      var dateRange = s.getRange("M:O")
       dateRange.setNumberFormat("m/dd/yyyy");
 
 
       // header
-      var ohOo = headers.getRange('A2:AK2');
+      var bbc = headers.getRange('A2:AL2');
       s.insertRowBefore(1); // inserts new empty first row
-      var destinationS = s.getRange("A1:AK1");
-      ohOo.copyTo(destinationS); // pastes headers to first row
+      var destinationS = s.getRange("A1:AL1");
+      bbc.copyTo(destinationS); // pastes headers to first row
 
 
-      // horizontal align -- center (columns H thru AK)
-      var colRange = s.getRange("H:AK");
+      // horizontal & vertical align -- center, middle (columns I thru AL)
+      var colRange = s.getRange("I:AL");
       colRange.setHorizontalAlignment("center").setVerticalAlignment("middle");
 
 
       // freeze rows and columns
       s.setFrozenRows(1);
-      s.setFrozenColumns(7);
+      s.setFrozenColumns(8);
+
 
 
       // invalid APT conditional formatting
-      var aptRange = s.getRange("N:N");
+      var aptRange = s.getRange("O:O");
       var aptRule = SpreadsheetApp.newConditionalFormatRule()
         .whenDateEqualTo(new Date("01/01/2001"))
         .setBackground("#f4cccc")
@@ -71,7 +70,7 @@ function ohOoFormat() {
 
       // ETA passed conditional formatting
       var currentDate = new Date();
-      var etaRange = s.getRange("L:L");
+      var etaRange = s.getRange("M:M");
       var etaRule = SpreadsheetApp.newConditionalFormatRule()
         .whenDateBefore(currentDate)
         .setBackground("#f4cccc")
@@ -85,7 +84,7 @@ function ohOoFormat() {
       // ETA too far out conditional formatting
       var currentDate = new Date();
       var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
-      var etaRange = s.getRange("L:L");
+      var etaRange = s.getRange("M:M");
       var etaRule = SpreadsheetApp.newConditionalFormatRule()
         .whenDateAfter(tooFarDate)
         .setBackground("#f4cccc")
@@ -95,37 +94,37 @@ function ohOoFormat() {
       etaRules.push(etaRule);
       s.setConditionalFormatRules(etaRules);
 
+
       // set tab color to green
       s.setTabColor("#00ff00");
-      
+
+
       // resize columns
         // setColumnWidth(column number, pixel width)  -- single column
         // setColumnWidths(column number, number of columns, pixel width) -- multiple columns
-      s.setColumnWidth(4, 70);
-      s.setColumnWidth(7, 180);
-      s.setColumnWidths(8, 4, 39);
-      s.setColumnWidths(12, 3, 71);
-      s.setColumnWidths(15, 3, 60);
-      s.setColumnWidths(18, 3, 72);
-      s.setColumnWidth(21, 155);
-      s.setColumnWidths(22, 3, 65);
-      s.setColumnWidths(26, 3, 51);
-      s.setColumnWidths(29, 4, 85);
-      s.setColumnWidths(33, 4, 76);
-      s.setColumnWidth(37, 500);
-
-
+      s.setColumnWidth(5, 70);
+      s.setColumnWidth(8, 180);
+      s.setColumnWidths(9, 4, 39);
+      s.setColumnWidths(13, 3, 71);
+      s.setColumnWidths(16, 3, 60);
+      s.setColumnWidths(19, 3, 72);
+      s.setColumnWidth(22, 155);
+      s.setColumnWidths(23, 3, 65);
+      s.setColumnWidths(27, 3, 51);
+      s.setColumnWidths(30, 4, 85);
+      s.setColumnWidths(34, 4, 76);
+      s.setColumnWidth(38, 310);
 
     } else {
       var ui = SpreadsheetApp.getUi();
-      var Alert = ui.alert("There are more (or less) than 6 visible tabs/sheets. This script will not run unless there are exactly 6 unhidden tabs/sheets. Please make the necessary adjustments and  rerun the script.");
+      var Alert = ui.alert("The are more (or less) than 6 visible tabs/sheets. This script will not run unless there are exactly 6 unhidden tabs/sheets. Please make the necessary adjustments and rerun the script.");
     }
     return;
   }
   hideTabs();
-    
-
 }
+
+  
 
 
 
@@ -134,9 +133,11 @@ function ohOoFormat() {
 /*  ********************  */
 
 function promoFormat() {
-  
+
+  // local variables
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
+
 
   // updating sheet name with current date
   let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
@@ -178,7 +179,6 @@ function promoFormat() {
   aptRules.push(aptRule);
   s.setConditionalFormatRules(aptRules);
 
-
   // ETA passed conditional formatting
   var currentDate = new Date();
   var etaRange = s.getRange("L:L");
@@ -190,9 +190,9 @@ function promoFormat() {
   var etaRules = s.getConditionalFormatRules();
   etaRules.push(etaRule);
   s.setConditionalFormatRules(etaRules);
-  
 
-  // ETA too far out conditional formatting (10 days or more)
+
+  // ETA too far out conditional formatting
   var currentDate = new Date();
   var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
   var etaRange = s.getRange("L:L");
@@ -210,7 +210,7 @@ function promoFormat() {
   s.setTabColor("#00ff00");
 
   // resize columns
-  s.setColumnWidth(4, 70);
+  s.setColumnWidth(5, 70);
   s.setColumnWidth(7, 180);
   s.setColumnWidths(8, 4, 39);
   s.setColumnWidths(12, 3, 71);
@@ -220,49 +220,52 @@ function promoFormat() {
   s.setColumnWidths(22, 3, 65);
   s.setColumnWidths(26, 3, 51);
   s.setColumnWidths(29, 2, 85);
-
 }
 
 
 
-/*  *********************  */
-/*  ENDCAP TAB FORMATTING  */
-/*  *********************  */
 
-function endcapFormat() {
+/*  ********************  */
+/*  NL/BS TAB FORMATTING  */
+/*  ********************  */
 
+
+function nlFormat() {
+
+  // local variables
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
 
   // updating sheet name with current date
   let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
-  let endcapTabName = "ENDCAP " + date;
-  s.setName(endcapTabName);
+  let nlTabName = "NL/BS " + date;
+  s.setName(nlTabName);
 
 
   // date formatting
-  var dateRange = s.getRange("I:J");
+  var dateRange = s.getRange("L:N");
   dateRange.setNumberFormat("m/dd/yyyy");
 
 
+  // horizontal align -- center (columns H thru AJ)
+  var colRange = s.getRange("H:AD");
+  colRange.setHorizontalAlignment("center").setVerticalAlignment("middle");
+
+
   // header
-  var endcap = headers.getRange('A7:O7');
+  var nlbs = headers.getRange('A7:AD7');
   s.insertRowBefore(1); // inserts new empty first row
-  var destinationS = s.getRange("A1:O1");
-  endcap.copyTo(destinationS); // pastes headers to first row
+  var destinationS = s.getRange("A1:AD1");
+  nlbs.copyTo(destinationS); // pastes headers to first row
 
 
-  // horizontal align -- center, vertical align -- middle (all cells)
-  var colRange = s.getRange("A:O");
-  colRange.setHorizontalAlignment("center").setVerticalAlignment("middle").setVerticalAlignment("middle");
-
-
-  // freeze header row
+  // freeze rows and columns
   s.setFrozenRows(1);
+  s.setFrozenColumns(7);
 
 
   // invalid APT conditional formatting
-  var aptRange = s.getRange("J:J");
+  var aptRange = s.getRange("N:N");
   var aptRule = SpreadsheetApp.newConditionalFormatRule()
     .whenDateEqualTo(new Date("01/01/2001"))
     .setBackground("#f4cccc")
@@ -275,7 +278,7 @@ function endcapFormat() {
 
   // ETA passed conditional formatting
   var currentDate = new Date();
-  var etaRange = s.getRange("I:I");
+  var etaRange = s.getRange("L:L");
   var etaRule = SpreadsheetApp.newConditionalFormatRule()
     .whenDateBefore(currentDate)
     .setBackground("#f4cccc")
@@ -284,12 +287,12 @@ function endcapFormat() {
   var etaRules = s.getConditionalFormatRules();
   etaRules.push(etaRule);
   s.setConditionalFormatRules(etaRules);
-  
+
 
   // ETA too far out conditional formatting
   var currentDate = new Date();
   var tooFarDate = new Date(currentDate.setDate(currentDate.getDate()+10));
-  var etaRange = s.getRange("I:I");
+  var etaRange = s.getRange("L:L");
   var etaRule = SpreadsheetApp.newConditionalFormatRule()
     .whenDateAfter(tooFarDate)
     .setBackground("#f4cccc")
@@ -299,14 +302,25 @@ function endcapFormat() {
   etaRules.push(etaRule);
   s.setConditionalFormatRules(etaRules);
 
+
   // set tab color to green
   s.setTabColor("#00ff00");
 
-  // resize columns
-  s.autoResizeColumns(1, 11);
-  s.setColumnWidth(12, 72);
-  s.setColumnWidths(13, 3, 72);
+
+  // resize columns 
+  s.setColumnWidth(4, 70);
+  s.setColumnWidth(7, 180);
+  s.setColumnWidths(8, 4, 39);
+  s.setColumnWidths(12, 3, 71);
+  s.setColumnWidths(15, 3, 60);
+  s.setColumnWidths(18, 3, 72);
+  s.setColumnWidth(21, 155);
+  s.setColumnWidths(22, 3, 65);
+  s.setColumnWidths(26, 3, 51);
+  s.setColumnWidths(29, 5, 85);
 }
+
+
 
 
 
@@ -332,15 +346,18 @@ function deleteCheckRows() {
   return;
 }
 
+
+
+
 function onOpen() {
   let ui = SpreadsheetApp.getUi();
   // menu button name, function button name, function for button to perform
   ui.createMenu('Scripts')
-    .addItem('OH OO Tab Formatting', 'ohOoFormat')   
+    .addItem('BBC Tab Formatting', 'bbcFormat')
     .addSeparator()
     .addItem('Promo Tab Formatting', 'promoFormat')
     .addSeparator()
-    .addItem('Endcap Tab Formatting', 'endcapFormat')
+    .addItem('NL/BS Formatting', 'nlFormat')
     .addSeparator()
     .addSeparator()
     .addSeparator()
@@ -349,7 +366,3 @@ function onOpen() {
 
     .addToUi(); 
 }
-
-
-
-
