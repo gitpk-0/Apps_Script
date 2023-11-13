@@ -119,7 +119,7 @@ function allFunctions() {
   }
   sortDataByLocation();
 
-  function formatColumnSeven() {
+  function formatOnhandColToNum() {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = spreadsheet.getActiveSheet();
 
@@ -129,7 +129,7 @@ function allFunctions() {
     // Set the number format for the range to display two decimal points
     range.setNumberFormat("0.00");
   }
-  formatColumnSeven();
+  formatOnhandColToNum();
 
 
   activeSheet.autoResizeColumns(1, 11);
