@@ -73,7 +73,7 @@ function allFunctions() {
     console.log("hour: " + hour);
 
     // If it's before 3 PM (15:00), use yesterday's date
-    if (hour < 20) {
+    if (hour < 15) {
         now.setDate(now.getDate() - 1);
     }
 
@@ -98,14 +98,39 @@ function allFunctions() {
   }
   updateSheetNameWithSuffix();
 
+  function setColumnJHeader() {
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = spreadsheet.getActiveSheet();
+
+    // Set the value of the first cell in column J to "Notes"
+    sheet.getRange("J1").setValue("Notes");
+  }
+  setColumnJHeader();
+
+  function sortDataByLocation() {
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = spreadsheet.getActiveSheet();
+
+    // Assuming the data starts from row 2 (row 1 is headers)
+    const range = sheet.getRange("A2:H" + sheet.getLastRow());
+
+    // Sort the data by the 8th column (Location) in descending order (Z to A)
+    range.sort({column: 8, ascending: false});
+  }
+  sortDataByLocation();
+
+
   activeSheet.autoResizeColumns(1, 11);
   activeSheet.setColumnWidth(3, 170);
   activeSheet.setColumnWidth(4, 360);
+  activeSheet.setColumnWidth(10, 195);
 
   var ohCol = activeSheet.getRange("G:G");
   ohCol.setNumberFormat("0.00");
   var ooCol = activeSheet.getRange("I:I");
   ooCol.setNumberFormat("0.00");
+
+
 }
 
 function frankHole() {
