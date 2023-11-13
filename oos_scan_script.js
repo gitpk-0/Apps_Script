@@ -67,18 +67,33 @@ function allFunctions() {
   function updateSheetNameWithSuffix() {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
-    let date = Utilities.formatDate(new Date(), "GMT-05:00", "M.d");
+    // Get the current date and time
+    let now = new Date();
+    let hour = now.getHours();
+    console.log("hour: " + hour);
+
+    // If it's before 3 PM (15:00), use yesterday's date
+    if (hour < 20) {
+        now.setDate(now.getDate() - 1);
+    }
+
+    // Format the date
+    let date = Utilities.formatDate(now, "GMT-05:00", "M.d");
     let thisTabName = date;
 
+    // Check for existing sheet names and add suffix if necessary
     let suffix = 1;
     while (spreadsheet.getSheetByName(thisTabName + (suffix > 1 ? ` (${suffix})` : ''))) {
-      suffix++;
+        suffix++;
     }
 
+    // Add suffix to the tab name if needed
     if (suffix > 1) {
-      thisTabName = `${date} (${suffix})`;
+        thisTabName = `${date} (${suffix})`;
     }
 
+    // Get the active sheet and set its name
+    let activeSheet = spreadsheet.getActiveSheet();
     activeSheet.setName(thisTabName);
   }
   updateSheetNameWithSuffix();
