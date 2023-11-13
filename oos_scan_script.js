@@ -119,6 +119,18 @@ function allFunctions() {
   }
   sortDataByLocation();
 
+  function formatColumnSeven() {
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = spreadsheet.getActiveSheet();
+
+    // Assuming the data starts from row 2 (row 1 is headers)
+    const range = sheet.getRange("G2:G" + sheet.getLastRow());
+
+    // Set the number format for the range to display two decimal points
+    range.setNumberFormat("0.00");
+  }
+  formatColumnSeven();
+
 
   activeSheet.autoResizeColumns(1, 11);
   activeSheet.setColumnWidth(3, 170);
