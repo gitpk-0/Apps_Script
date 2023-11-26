@@ -28,8 +28,15 @@ function updateCells() {
 
       // Loop through subsequent rows to find and concatenate child rows
       for (var j = i + 1; j < data.length && (data[j][0] === "Not Visible" && data[j][1] === "Simple"); j++) {
-        // Use a helper function to concatenate data from each child row and add it to the string
-        concatenatedString += concatenateChildRow(data[j]);
+        // Determine if the next row is also a child row
+        var isNextRowChild = j + 1 < data.length && data[j + 1][0] === "Not Visible" && data[j + 1][1] === "Simple";
+
+        // Call the concatenateChildRow function, passing two arguments:
+        // 1. data[j]: The current row's data.
+        // 2. isNextRowChild: A boolean indicating whether the subsequent row is also a child row.
+        // This function concatenates the current child row's data and, if the next row is a child, 
+        // appends a "|" symbol to indicate continuity with the following child row.
+        concatenatedString += concatenateChildRow(data[j], isNextRowChild);
       }
 
       // Add the final concatenated string for this parent row to the results array
@@ -48,18 +55,21 @@ function updateCells() {
 }
 
 // This helper function concatenates data from specific columns of a child row
-function concatenateChildRow(row) {
+function concatenateChildRow(row, isNextRowChild) {
   // Initialize an empty string for concatenation
-  var concatenatedString = row[2] + row[3]; // Start by concatenating values from Columns C and D
+  var concatenatedString = row[2] + "=" + row[3]; // Start by concatenating values from Columns C and D
 
   // If Column F is not blank, concatenate Columns E and F
-  concatenatedString += row[5] ? row[4] + row[5] : ""; 
+  concatenatedString += row[5] ? "," + row[4] + "=" + row[5] : ""; 
 
   // If Column H is not blank, concatenate Columns G and H
-  concatenatedString += row[7] ? row[6] + row[7] : "";
+  concatenatedString += row[7] ? "," + row[6] + "=" + row[7] : "";
 
-  // Always add the value from Column I
-  concatenatedString += row[8];
+  // Check if the 'isNextRowChild' boolean is true. If it is, append a "|" symbol 
+  // to the concatenated string to indicate the presence of a subsequent child row.
+  // If 'isNextRowChild' is false, no additional character is appended.
+  isNextRowChild ? concatenatedString += "|" : "";
+
 
   // Return the final concatenated string
   return concatenatedString;
