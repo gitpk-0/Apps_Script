@@ -1,8 +1,3 @@
-function onOpen() {
-  // var ss = SpreadsheetApp.getActiveSpreadsheet();
-  // var s = ss.getActiveSheet();
-}
-
 function onEdit(e) {
 
   dateAdded(e);
@@ -24,40 +19,40 @@ function onEdit(e) {
   }
 
   function dateAdded(e) {
-    let ss = e.source.getSheetByName("VENDORS");
+    let allOtherVendors = e.source.getSheetByName("||    ALL OTHER VENDORS    ||");
+    let fourSeasons = e.source.getSheetByName("||    FOUR SEASONS    ||");
     
-    let watchedCols = [1,2,3];
-    if (watchedCols.indexOf(e.range.columnStart) === -1) return;
+    // Process each sheet separately
+    processSheet(allOtherVendors, e);
+    processSheet(fourSeasons, e);
 
-    let row = e.range.getRow();
-    let col1Value = ss.getRange(row, 1).getValue();
-    let col2Value = ss.getRange(row, 2).getValue();
-    let col3Value = ss.getRange(row, 3).getValue();
-    let dateCell = ss.getRange(row, 11);
-    let initialsCell = ss.getRange(row, 10);
+    function processSheet(sheet, event) {
+      let watchedCols = [1,2,3];
+      if (watchedCols.indexOf(event.range.columnStart) === -1) return;
 
-    // Check if all the cells in columns 1, 2, and 3 are empty
-    if (col1Value === "" && col2Value === "" && col3Value === "") {
-      dateCell.setValue(null); // Clear the date value
-      initialsCell.setValue(null); // Clear the initials
-    } else {
-      // Check if the initials cell is empty before setting the initials
-      if (!initialsCell.getValue()) {
-        // Extract initials from the Gmail address
-        let email = Session.getActiveUser().getEmail();
-        let initials = extractInitialsFromEmail(email);
-        initialsCell.setValue(initials);
-      }
+      let row = event.range.getRow();
+      let col1Value = sheet.getRange(row, 1).getValue();
+      let col2Value = sheet.getRange(row, 2).getValue();
+      let col3Value = sheet.getRange(row, 3).getValue();
+      let dateCell = sheet.getRange(row, 11);
+      let initialsCell = sheet.getRange(row, 10);
 
-      let date = Utilities.formatDate(new Date(), "GMT-05:00", "M/d/YYYY");
-      // If the date cell is empty, set the date value
-      if (!dateCell.getValue()) {
-        console.log("setting date");
-        dateCell.setValue(date);
+      if (col1Value === "" && col2Value === "" && col3Value === "") {
+        dateCell.setValue(null);
+        initialsCell.setValue(null);
+      } else {
+        if (!initialsCell.getValue()) {
+          let email = Session.getActiveUser().getEmail();
+          let initials = extractInitialsFromEmail(email);
+          initialsCell.setValue(initials);
+        }
+        let date = Utilities.formatDate(new Date(), "GMT-05:00", "M/d/YYYY");
+        if (!dateCell.getValue()) {
+          dateCell.setValue(date);
+        }
       }
     }
 
-    // Helper function to extract initials from an email
     function extractInitialsFromEmail(email) {
       let parts = email.split("@")[0].split(".");
       let initials = parts.map(part => part.charAt(0).toUpperCase()).join("");
