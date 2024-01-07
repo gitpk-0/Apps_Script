@@ -4,18 +4,26 @@ function onEdit(e) {
 
   var range = e.range;
   var columnIndex = range.getColumn();
+  var sheet = e.source.getActiveSheet();
   
-  if (columnIndex <= 6 && columnIndex !== 4) {
-    // Apply your desired cell formatting here
-    range.setFontWeight("normal"); // Set font weight to normal
-    range.setFontFamily("Arial"); // Set font family to Arial
-    range.setFontSize(11); // Set font size to 11
-    range.setFontLine("none"); // Remove underline or strikethrough
-    range.setHorizontalAlignment("center"); // Center the text horizontally
-    range.setVerticalAlignment("middle"); // Center the text vertically
-    range.setFontColor(null); // Set the font color to the default (automatic)
-    range.setBackground(null); // Set the background color to the default (none)
-    // Add more formatting options as needed
+  // Check if the edited sheet is not "Sale Sign Pull"
+  if (sheet.getName() !== "Sale Sign Pull") {
+    var range = e.range;
+    var columnIndex = range.getColumn();
+    
+    // Check if columnIndex is less than or equal to 6 and not equal to 4
+    if (columnIndex <= 6 && columnIndex !== 4) {
+      // Apply your desired cell formatting here
+      range.setFontWeight("normal"); // Set font weight to normal
+      range.setFontFamily("Arial"); // Set font family to Arial
+      range.setFontSize(11); // Set font size to 11
+      range.setFontLine("none"); // Remove underline or strikethrough
+      range.setHorizontalAlignment("center"); // Center the text horizontally
+      range.setVerticalAlignment("middle"); // Center the text vertically
+      range.setFontColor(null); // Set the font color to the default (automatic)
+      range.setBackground(null); // Set the background color to the default (none)
+      // Add more formatting options as needed
+    }
   }
 
   function dateAdded(e) {
