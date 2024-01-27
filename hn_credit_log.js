@@ -42,8 +42,8 @@ function onEdit(e) {
       let col1Value = sheet.getRange(row, 1).getValue();
       let col2Value = sheet.getRange(row, 2).getValue();
       let col3Value = sheet.getRange(row, 3).getValue();
-      let dateCell = sheet.getRange(row, 11);
-      let initialsCell = sheet.getRange(row, 10);
+      let dateCell = sheet.getRange(row, 12);
+      let initialsCell = sheet.getRange(row, 11);
 
       if (col1Value === "" && col2Value === "" && col3Value === "") {
         dateCell.setValue(null);
@@ -68,3 +68,39 @@ function onEdit(e) {
     }
   }
 }
+
+function archiveCommittedItems() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  var targetSheet = sheet.getSheetByName("Archive"); // Target tab name
+
+  // Array of source sheets
+  var sourceSheets = [
+    sheet.getSheetByName("||    ALL OTHER VENDORS    ||"),
+    sheet.getSheetByName("||    FOUR SEASONS    ||")
+  ];
+
+  // Process each source sheet
+  sourceSheets.forEach(function(sourceSheet) {
+    var data = sourceSheet.getDataRange().getValues(); // Get all data from the current source sheet
+
+    // Iterate backwards to avoid index shifting when deleting rows
+    for (var i = data.length - 1; i >= 0; i--) {
+      if (data[i][6] === true) { // Check if the cell in column G (index 6) is TRUE
+        targetSheet.appendRow(data[i]); // Append the entire row to the target sheet
+        sourceSheet.deleteRow(i + 1); // Delete the row from the source sheet
+      }
+    }
+  });
+}
+
+
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('Scripts')
+      .addItem('Archive Committed Items', 'archiveCommittedItems')
+      .addToUi();
+}
+
+
+
+
