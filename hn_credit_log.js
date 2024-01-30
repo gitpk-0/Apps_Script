@@ -86,7 +86,27 @@ function archiveCommittedItems() {
     // Iterate backwards to avoid index shifting when deleting rows
     for (var i = data.length - 1; i >= 0; i--) {
       if (data[i][6] === true) { // Check if the cell in column G (index 6) is TRUE
+        // Prepend a single quote to preserve leading zeros for columns A, B, and H
+        data[i][0] = "'" + data[i][0]; // Column A
+        data[i][1] = "'" + data[i][1]; // Column B
+        data[i][7] = "'" + data[i][7]; // Column H
+
         targetSheet.appendRow(data[i]); // Append the entire row to the target sheet
+
+        var appendedRowIndex = targetSheet.getLastRow(); // Get the index of the last row
+
+        // Process the columns A, B, and H
+        [1, 2, 8].forEach(function(columnIndex) {
+          var cell = targetSheet.getRange(appendedRowIndex, columnIndex);
+          cell.setNumberFormat("@"); // Set the number format to plain text
+
+          // Remove the leading single quote from the displayed value
+          var currentValue = cell.getDisplayValue();
+          if (currentValue.startsWith("'")) {
+            cell.setValue(currentValue.substring(1));
+          }
+        });
+
         sourceSheet.deleteRow(i + 1); // Delete the row from the source sheet
       }
     }
@@ -100,7 +120,3 @@ function onOpen() {
       .addItem('Archive Committed Items', 'archiveCommittedItems')
       .addToUi();
 }
-
-
-
-
