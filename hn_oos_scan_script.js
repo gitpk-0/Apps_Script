@@ -134,7 +134,9 @@ function allFunctions() {
 
   activeSheet.autoResizeColumns(1, 11);
   activeSheet.setColumnWidth(3, 170);
-  activeSheet.setColumnWidth(4, 360);
+  activeSheet.setColumnWidth(4, 260);
+  activeSheet.setColumnWidth(5, 70);
+  activeSheet.setColumnWidth(6, 160);
   activeSheet.setColumnWidth(10, 195);
 
   var ohCol = activeSheet.getRange("G:G");
