@@ -114,6 +114,54 @@ function archiveCommittedItems() {
 }
 
 
+// untested optimization of archiveCommittedItems function:
+// function archiveCommittedItems() {
+//   var sheet = SpreadsheetApp.getActiveSpreadsheet();
+//   var targetSheet = sheet.getSheetByName("Archive"); // Target tab name
+
+//   // Changed: Use sheet names directly in the array to simplify the logic
+//   var sourceSheets = [
+//     "||    ALL OTHER VENDORS    ||",
+//     "||    FOUR SEASONS    ||"
+//   ];
+
+//   sourceSheets.forEach(function(sheetName) {
+//     var sourceSheet = sheet.getSheetByName(sheetName);
+//     var data = sourceSheet.getDataRange().getValues(); // Get all data from the current source sheet
+//     var rowsToDelete = []; // Changed: Collect rows to delete in a batch
+//     var dataToAppend = []; // Changed: Collect data to append in a batch
+
+//     // Process data in memory to minimize Spreadsheet operations
+//     for (var i = data.length - 1; i >= 0; i--) {
+//       if (data[i][6] === true) { // Check if the cell in column G (index 6) is TRUE
+//         // Adjust data for columns A, B, and H without prepending single quote
+//         var rowData = data[i];
+
+//         // Changed: Handle text conversion in memory to avoid manipulating cell formats individually later
+//         rowData[7] = rowData[7].toString(); // Ensure column H is treated as text
+
+//         dataToAppend.push(rowData); // Collect data to append
+//         rowsToDelete.push(i + 1); // Collect row numbers to delete
+//       }
+//     }
+
+//     // Append data in batches to reduce the number of appendRow calls
+//     if (dataToAppend.length > 0) {
+//       dataToAppend.reverse(); // Reverse to maintain original order when appending
+//       dataToAppend.forEach(function(row) {
+//         targetSheet.appendRow(row); // Append each row from the collected data
+//       });
+//     }
+
+//     // Delete rows in batches to improve efficiency
+//     // Note: Actual deletion is still one by one due to Google Apps Script limitations,
+//     // but collecting and processing this way reduces the number of Spreadsheet operations.
+//     rowsToDelete.reverse().forEach(function(rowNum) {
+//       sourceSheet.deleteRow(rowNum); // Delete each row from the bottom up to avoid index issues
+//     });
+//   });
+// }
+
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Scripts')
