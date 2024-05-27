@@ -1,7 +1,7 @@
 var activeSheet = SpreadsheetApp.getActiveSheet();
 var ui = SpreadsheetApp.getUi();
 
-function allFunctions() {
+function cleanUpSheet() {
 
   function moveSheetToFirstPosition() {
     var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -133,6 +133,7 @@ function allFunctions() {
 
 
   activeSheet.autoResizeColumns(1, 11);
+  activeSheet.setColumnWidth(2, 105);
   activeSheet.setColumnWidth(3, 170);
   activeSheet.setColumnWidth(4, 260);
   activeSheet.setColumnWidth(5, 70);
@@ -153,7 +154,7 @@ function frankHole() {
 
 function onOpen() {
   ui.createMenu('Scripts')
-    .addItem('Clean Up Script', 'allFunctions')
+    .addItem('Clean Up Script', 'cleanUpSheet')
     .addItem('Red Button', 'frankHole')
     .addToUi();
 }
